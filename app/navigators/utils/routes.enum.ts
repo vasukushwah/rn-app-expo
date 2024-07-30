@@ -14,6 +14,8 @@ export enum PUBLIC_SCREENS {
   SIGN_IN = "SignInScreen",
   SIGN_UP = "SignUpScreen",
   FORGOT_PASSWORD = "ForgotPasswordScreen",
+  SET_NEW_PASSWORD = "SetNewPasswordScreen"  
+
 }
 
 // Application With Authentication Screens
