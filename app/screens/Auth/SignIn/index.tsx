@@ -4,9 +4,9 @@ import { Button, Header, Icon, Screen, Text, TextField, TextFieldAccessoryProps 
 import { colors, spacing } from "app/theme"
 import { Formik } from "formik"
 import * as Yup from "yup"
-import { PUBLIC_SCREENS } from "app/navigators/utils/routes.enum"
-import { goBack, navigate } from "app/navigators/navigationUtilities"
 import SocialAccounts from "../Components/SocialAccounts"
+import { goBack, navigate } from "app/navigators"
+import { PUBLIC_SCREENS } from "app/navigators/navigation.types"
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -122,4 +122,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SignInScreen
+export { SignInScreen }

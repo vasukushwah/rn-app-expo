@@ -5,16 +5,18 @@ import { spacing } from "app/theme"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import SocialAccounts from "../Components/SocialAccounts"
-import { goBack, navigate } from "app/navigators/navigationUtilities"
-import { PUBLIC_SCREENS } from "app/navigators/utils/routes.enum"
-import { Picker } from '@react-native-picker/picker'
+import { Picker } from "@react-native-picker/picker"
+import { goBack, navigate } from "app/navigators"
+import { PUBLIC_SCREENS } from "app/navigators/navigation.types"
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email address").required("Email is required"),
   gender: Yup.string().required("Gender is required"),
-  phone: Yup.string().matches(/^[0-9]+$/, "Phone number is not valid").required("Phone number is required"),
+  phone: Yup.string()
+    .matches(/^[0-9]+$/, "Phone number is not valid")
+    .required("Phone number is required"),
 })
 
 const SignUpScreen = () => {
@@ -94,7 +96,9 @@ const SignUpScreen = () => {
                 <Picker.Item label="Female" value="female" />
                 <Picker.Item label="Other" value="other" />
               </Picker>
-              {touched.gender && errors.gender && <Text style={styles.errorText}>{errors.gender}</Text>}
+              {touched.gender && errors.gender && (
+                <Text style={styles.errorText}>{errors.gender}</Text>
+              )}
             </View>
             <TextField
               ref={phoneInput}
@@ -163,17 +167,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
     height: 46,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   picker: {
     height: 46,
-    width: '100%',
+    width: "100%",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginTop: 4,
   },
 })
 
-export default SignUpScreen
+export { SignUpScreen }

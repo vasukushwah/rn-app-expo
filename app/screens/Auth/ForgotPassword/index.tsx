@@ -5,7 +5,8 @@ import { colors, SCREEN_HEIGHT, SCREEN_WIDTH, spacing } from "app/theme"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import OtpInputs, { OtpInputsRef } from "react-native-otp-inputs"
-import { goBack } from "app/navigators/navigationUtilities"
+import { goBack, navigate } from "app/navigators"
+import { PUBLIC_SCREENS } from "app/navigators/navigation.types"
 
 const emailValidationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -29,6 +30,7 @@ const ForgotPasswordScreen = () => {
   const handleOtpSubmit = (values) => {
     console.log(values)
     // Code to verify OTP and proceed
+    navigate(PUBLIC_SCREENS.SET_NEW_PASSWORD)
   }
 
   return (
@@ -40,7 +42,7 @@ const ForgotPasswordScreen = () => {
       <Header leftIcon="back" leftText="Back" onLeftPress={() => goBack()} />
       {step === 1 && (
         <Formik
-          initialValues={{ email: "" }}
+          initialValues={{ email: "jemish@gmail.com" }}
           validationSchema={emailValidationSchema}
           onSubmit={handleEmailSubmit}
         >
@@ -72,19 +74,23 @@ const ForgotPasswordScreen = () => {
           validationSchema={otpValidationSchema}
           onSubmit={handleOtpSubmit}
         >
-          {({ handleChange, handleBlur : _, handleSubmit, values, errors, touched }) => (
+          {({ handleChange, handleBlur: _, handleSubmit, values, errors, touched }) => (
             <View style={styles.otpInputView}>
               <Text preset="title_md" weight="medium" color="text" text="Forgot Password" />
               <Text color="text" text="Code has been sent to ***** ***70" />
               <OtpInputs
-                handleChange={handleChange("otp")}
+                handleChange={(code) => {
+                  console.log("code: ", code)
+                  handleChange("otp")(code)
+                  console.log("values.otp: ", values.otp)
+                }}
                 defaultValue={values.otp}
                 ref={otpInput}
                 numberOfInputs={4}
                 inputStyles={styles.otpInput}
-                autofillFromClipboard={true}
-                autofillListenerIntervalMS={5}
-                focusStyles={{ borderColor: colors.primary }}
+                // autofillFromClipboard={true}
+                // autofillListenerIntervalMS={5}
+                // focusStyles={{ borderColor: colors.primary }}
               />
               {touched.otp && errors.otp && <Text style={styles.errorText}>{errors.otp}</Text>}
               <Text style={styles.resendText}>
@@ -135,4 +141,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ForgotPasswordScreen
+export { ForgotPasswordScreen }

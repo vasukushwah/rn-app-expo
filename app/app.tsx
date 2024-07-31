@@ -23,13 +23,12 @@ import React from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import * as Linking from "expo-linking"
 import { useInitialRootStore } from "./models"
-import { useNavigationPersistence } from "./navigators"
+import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
 import Config from "./config"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { ViewStyle } from "react-native"
-import { RootNavigator } from "./navigators/RootNavigator"
 import { customFontsToLoad } from "./theme/typography"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -104,16 +103,16 @@ function App(props: AppProps) {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
         <GestureHandlerRootView style={$container}>
-          <RootNavigator
-            linking={linking}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
-          />
-          {/* <AppNavigator
+          {/* <RootNavigator
             linking={linking}
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
           /> */}
+          <AppNavigator
+            linking={linking}
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
         </GestureHandlerRootView>
       </ErrorBoundary>
     </SafeAreaProvider>

@@ -1,23 +1,16 @@
-import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Image, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "app/components"
 import APP_ASSETS from "assets/images"
-import { MainStackParamList } from "app/navigators/stack/stacks.types"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { PUBLIC_SCREENS } from "app/navigators/utils/routes.enum"
 import { styles } from "./style"
 import { spacing } from "app/theme"
-import NavigationUtils from "app/navigators/utils/routes.helper"
-import { navigate } from "app/navigators/navigationUtilities"
+import { AppStackScreenProps, navigate } from "app/navigators"
+import { GENERAL_SCREENS, PUBLIC_SCREENS } from "app/navigators/navigation.types"
 
-type WelcomeBoardScreenProps = NativeStackScreenProps<
-  MainStackParamList,
-  PUBLIC_SCREENS.WELCOME_BOARD
->
+interface WelcomeBoardScreenProps extends AppStackScreenProps<GENERAL_SCREENS.WELCOME> {}
 
-export const WelcomeScreen: FC<WelcomeBoardScreenProps> = ({ navigation }) => {
-  const handleOnLogIn = () => navigation?.navigate(PUBLIC_SCREENS.SIGN_IN)
+export const WelcomeScreen: FC<WelcomeBoardScreenProps> = () => {
+  const handleOnLogIn = () => navigate(PUBLIC_SCREENS.SIGN_IN)
 
   return (
     <Screen contentContainerStyle={$screenContentContainer} safeAreaEdges={["top", "bottom"]}>
@@ -35,7 +28,11 @@ export const WelcomeScreen: FC<WelcomeBoardScreenProps> = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <Button text="Create an account" preset="filled" onPress={()=>navigate(PUBLIC_SCREENS.SIGN_UP)}/>
+        <Button
+          text="Create an account"
+          preset="filled"
+          onPress={() => navigate(PUBLIC_SCREENS.SIGN_UP)}
+        />
         <Button text="Log In" preset="default" onPress={() => handleOnLogIn()} />
       </View>
     </Screen>

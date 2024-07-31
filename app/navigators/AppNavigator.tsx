@@ -8,7 +8,7 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
-  NavigatorScreenParams,
+  NavigatorScreenParams, // @demo remove-current-line
 } from "@react-navigation/native"
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
@@ -16,10 +16,11 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
-import { useStores } from "../models"
-import { DemoNavigator, DemoTabParamList } from "./DemoNavigator"
+import { useStores } from "../models" // @demo remove-current-line
+import { DemoNavigator, DemoTabParamList } from "./DemoNavigator" // @demo remove-current-line
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { colors } from "app/theme"
+import { GENERAL_SCREENS, PRIVATE_SCREENS, PUBLIC_SCREENS } from "./navigation.types"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -36,9 +37,17 @@ import { colors } from "app/theme"
  */
 export type AppStackParamList = {
   Welcome: undefined
-  Login: undefined
-  Demo: NavigatorScreenParams<DemoTabParamList>
-  // 🔥 Your screens go here
+  Login: undefined // @demo remove-current-line
+  Demo: NavigatorScreenParams<DemoTabParamList> // @demo remove-current-line
+  [GENERAL_SCREENS.INITIAL]: undefined
+  [GENERAL_SCREENS.ONBOARDING]: undefined
+  [GENERAL_SCREENS.WELCOME]: undefined
+  [PUBLIC_SCREENS.SIGN_IN]: undefined
+  [PUBLIC_SCREENS.SIGN_UP]: undefined
+  [PUBLIC_SCREENS.FORGOT_PASSWORD]: undefined
+  [PUBLIC_SCREENS.SET_NEW_PASSWORD]: undefined
+  [PRIVATE_SCREENS.ChangePassword]: undefined
+
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -57,27 +66,48 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
+  // @demo remove-block-start
   const {
     authenticationStore: { isAuthenticated },
   } = useStores()
 
+  // @demo remove-block-end
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
-      initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+      initialRouteName={GENERAL_SCREENS.ONBOARDING} // @demo remove-current-line
+      // initialRouteName={isAuthenticated ? "Welcome" : "Login"} // @demo remove-current-line
     >
+      {/* @demo remove-block-start */}
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-
+          {/* @demo remove-block-end */}
+          {/* <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} /> */}
+          {/* @demo remove-block-start */}
           <Stack.Screen name="Demo" component={DemoNavigator} />
+          <Stack.Screen
+            name={PRIVATE_SCREENS.ChangePassword}
+            component={Screens.ChangePasswordScreen}
+          />
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={Screens.LoginScreen} />
+          {/* <Stack.Screen name="Login" component={Screens.LoginScreen} /> */}
+          <Stack.Screen name={GENERAL_SCREENS.ONBOARDING} component={Screens.OnBoardingScreen} />
+          <Stack.Screen name={GENERAL_SCREENS.WELCOME} component={Screens.WelcomeScreen} />
+          <Stack.Screen name={PUBLIC_SCREENS.SIGN_UP} component={Screens.SignUpScreen} />
+          <Stack.Screen name={PUBLIC_SCREENS.SIGN_IN} component={Screens.SignInScreen} />
+          <Stack.Screen
+            name={PUBLIC_SCREENS.FORGOT_PASSWORD}
+            component={Screens.ForgotPasswordScreen}
+          />
+          <Stack.Screen
+            name={PUBLIC_SCREENS.SET_NEW_PASSWORD}
+            component={Screens.SetNewPasswordScreen}
+          />
         </>
       )}
-
+      {/* @demo remove-block-end */}
       {/** 🔥 Your screens go here */}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>

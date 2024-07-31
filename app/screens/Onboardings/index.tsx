@@ -1,7 +1,5 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Button, Screen, Text } from "app/components"
-import { MainStackParamList } from "app/navigators/stack/stacks.types"
-import { GENERAL_SCREENS, PUBLIC_SCREENS } from "app/navigators/utils/routes.enum"
+import { observer } from "mobx-react-lite"
 import React, { FC, memo, useState } from "react"
 import { Image, View, ViewStyle } from "react-native"
 import APP_ASSETS from "../../../assets/images/index"
@@ -9,16 +7,19 @@ import styles from "./styles"
 import { ONBOARDING_SCREEN_MSG } from "./util/Onboardings.constant"
 import { spacing } from "app/theme"
 
-type OnBoardingScreenProps = NativeStackScreenProps<MainStackParamList, GENERAL_SCREENS.ONBOARDING>
+import { AppStackScreenProps, navigate } from "app/navigators"
+import { GENERAL_SCREENS } from "app/navigators/navigation.types"
 
-const OnBoardingScreen: FC<OnBoardingScreenProps> = ({ navigation }) => {
+interface OnBoardingScreenProps extends AppStackScreenProps<GENERAL_SCREENS.ONBOARDING> {}
+
+const OnBoarding: FC<OnBoardingScreenProps> = observer(() => {
   const [onBoardingStep, setOnBoardingStep] = useState<number>(1)
 
   const handleNext = () => {
     if (onBoardingStep < 3) {
       setOnBoardingStep((prevStep) => prevStep + 1)
     } else {
-      navigation.navigate(PUBLIC_SCREENS.WELCOME_BOARD)
+      navigate(GENERAL_SCREENS.WELCOME)
     }
   }
   let screenContent: JSX.Element | null = null
@@ -104,9 +105,9 @@ const OnBoardingScreen: FC<OnBoardingScreenProps> = ({ navigation }) => {
       <Button onPress={handleNext} text={onBoardingStep < 3 ? "Next" : "Finish"} preset="default" />
     </Screen>
   )
-}
-
-export default memo(OnBoardingScreen)
+})
+const OnBoardingScreen = memo(OnBoarding)
+export { OnBoardingScreen }
 
 const $screenContentContainer: ViewStyle = {
   paddingVertical: spacing.md,
